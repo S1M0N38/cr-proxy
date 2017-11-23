@@ -1,11 +1,11 @@
 from twisted.internet.protocol import ClientFactory
-from coc.client.protocol import CoCClientProtocol
+from cr.client.protocol import CrClientProtocol
 
 
-class CoCClientFactory(ClientFactory):
+class CrClientFactory(ClientFactory):
 
     def __init__(self, server):
         self.server = server
 
     def buildProtocol(self, addr):
-        return CoCClientProtocol(self)
+        return CrClientProtocol(self)

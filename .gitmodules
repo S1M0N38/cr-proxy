@@ -1,3 +1,0 @@
-[submodule "coc/message"]
-	path = coc/message
-	url = https://github.com/royale-proxy/cr-messages-python.git

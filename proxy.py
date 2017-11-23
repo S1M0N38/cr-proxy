@@ -1,22 +1,21 @@
 from twisted.internet import reactor
-from coc.message.definitions import CoCMessageDefinitions
-from coc.server.endpoint import CoCServerEndpoint
-from coc.server.factory import CoCServerFactory
-from coc.client.endpoint import CoCClientEndpoint
-from coc.proxyconfig import ProxyConfig
-from coc.replay import Replay
+from cr.server.factory import CrServerFactory
+from twisted.internet.endpoints import TCP4ServerEndpoint
+from twisted.internet.endpoints import TCP4ClientEndpoint
 
-config_file = "config.json"
-    
+# Client
+server = 'game.clashroyaleapp.com'
+port = 9339
+
+# Server
+interface = '0.0.0.0'
+port = 9339
+
 if __name__ == "__main__":
+    client_endpoint = TCP4ClientEndpoint(reactor, server, port)
+    server_endpoint = TCP4ServerEndpoint(reactor, port, interface=interface)
+    server_endpoint.listen(CrServerFactory(client_endpoint))
 
-    ProxyConfig.start(config_file)
-    Replay.start()
-    definitions = CoCMessageDefinitions.read()
-    client_endpoint = CoCClientEndpoint(reactor, "game.clashroyaleapp.com", 9339)
-    server_endpoint = CoCServerEndpoint(reactor, 9339)
-    server_endpoint.listen(CoCServerFactory(client_endpoint, definitions))
-
-    print("listening on {}:{} ...".format(server_endpoint.interface, server_endpoint.port))
+    print("listening on {}:{} ...".format(interface, port))
 
     reactor.run()

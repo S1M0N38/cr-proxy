@@ -1,13 +1,15 @@
 from nacl.public import PublicKey
-from coc.crypto import CoCCrypto, CoCNonce
+from cr.crypto import CrCrypto, CrNonce
 
 
-class CoCClientCrypto(CoCCrypto):
+class CrClientCrypto(CrCrypto):
 
     def __init__(self, factory):
         self._factory = factory
         self.keypair()
-        self._serverkey = PublicKey(bytes.fromhex("980CF7BB7262B386FEA61034ABA7370613627919666B34E6ECF66307A381DD61"))
+        self._serverkey = PublicKey(bytes.fromhex(
+            '980cf7bb7262b386fea61034aba7370613627919666b34e6ecf66307a381dd61'
+            ))
         self.beforenm(self.serverkey)
 
     @property
@@ -22,17 +24,23 @@ class CoCClientCrypto(CoCCrypto):
         messageid = int.from_bytes(packet[:2], byteorder="big")
         unknown = int.from_bytes(packet[5:7], byteorder="big")
         payload = packet[7:]
-        if messageid == 20100 or (messageid == 20103 and not self.session_key): # ServerHandshake or LoginFailed
+        # ServerHandshake or LoginFailed
+        if messageid == 20100 or \
+           (messageid == 20103 and not self.session_key):
             if messageid == 20100:
                 self.session_key = self.server.session_key = packet[-24:]
             return messageid, unknown, payload
-        elif messageid in {20103, 20104}: # LoginFailed or LoginOk
-            nonce = CoCNonce(nonce=self.encrypt_nonce, clientkey=self.clientkey, serverkey=self.serverkey)
+        # LoginFailed or LoginOk
+        elif messageid in {20103, 20104}:
+            nonce = CrNonce(nonce=self.encrypt_nonce,
+                            clientkey=self.clientkey,
+                            serverkey=self.serverkey)
             ciphertext = payload
             try:
                 message = self.decrypt(ciphertext, bytes(nonce))
             except ValueError:
-                print("Failed to decrypt the message (client, {}).".format(messageid))
+                print('Failed to decrypt the message (client, {}).'
+                      .format(messageid))
                 self.server.loseConnection()
                 return False
             else:
@@ -48,7 +56,8 @@ class CoCClientCrypto(CoCCrypto):
         if messageid == 10100:
             return messageid, unknown, payload
         elif messageid == 10101:
-            nonce = CoCNonce(clientkey=self.clientkey, serverkey=self.serverkey)
+            nonce = CrNonce(clientkey=self.clientkey,
+                            serverkey=self.serverkey)
             message = self.session_key + self.encrypt_nonce + payload
             ciphertext = self.encrypt(message, nonce)
             return messageid, unknown, self.clientkey + ciphertext

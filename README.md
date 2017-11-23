@@ -1,26 +1,26 @@
-**Warning:** With version 8.212.12, Supercell has started banning accounts for the use of third party software. I am unsure what, if any, checks are in place that might reveal the use of this proxy, so continue use at your own risk.  See [here](http://supercell.com/en/safe-and-fair-play/) for more info.
+NOTHING IS CHANGED FROM THE ORIGINAL [CR-PROXY](https://github.com/royale-proxy/cr-proxy) JUST A CODE CLEAN UP
 
-# cr-proxy
+> **With version 8.212.12, Supercell has started banning accounts for the use of third party software. I am unsure what, if any, checks are in place that might reveal the use of this proxy, so continue use at your own risk.  See [here](http://supercell.com/en/safe-and-fair-play/) for more info.**
 
-Run with:
 
-    python3.5 proxy.py
+### :arrow_down:  Installation
 
-## Installation
+Follow [this](https://github.com/cr-api/cr-api/wiki/The-Proxy-way-for-Noobs) guide
 
-1. Install dependencies.
-2. Patch the [Clash Royale APK](https://apkpure.com/clash-royale/com.supercell.clashroyale) with [cr-patcher](https://github.com/royale-proxy/cr-patcher) and install.
+### :zap:  Usage
 
-## Dependencies
+To run the proxy:```python proxy.py```
 
-Install `twisted` with:
+To decode the file saved in replay: ```python replay.py <filename>```
+(example: ```python replay.py 10101```)
 
-    python3.5 -m pip install twisted
 
-Install `pynacl` with:
+### :thumbsup:  Acknowledgements
 
-    python3.5 -m pip install pynacl
+Thanks to all people on the Discord server [Royale Developers](https://discord.gg/BuUtGPM) and [SC Dev Team](https://discord.gg/hTVhy3V)
 
-Install `pyblake2` with:
 
-    python3.5 -m pip install pyblake2
+### :book:  Important resources
+
+- [How Clash Royale encryption works](https://github.com/clugh/cocdp/wiki/Protocol)
+- [How Clash Royale packets are encoded](https://github.com/royale-proxy/cr-messages)

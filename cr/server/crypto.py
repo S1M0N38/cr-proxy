@@ -1,13 +1,16 @@
 from nacl.public import PrivateKey, PublicKey
 from nacl.exceptions import CryptoError
-from coc.crypto import CoCCrypto, CoCNonce
-from coc.hexdump import hexdump
+from cr.crypto import CrCrypto, CrNonce
+from cr.hexdump import hexdump
 
-class CoCServerCrypto(CoCCrypto):
+
+class CrServerCrypto(CrCrypto):
 
     def __init__(self, factory):
         self._factory = factory
-        self._sk = PrivateKey(bytes.fromhex("1891d401fadb51d25d3a9174d472a9f691a45b974285d47729c45c6538070d85"))
+        self._sk = PrivateKey(bytes.fromhex(
+            '1891d401fadb51d25d3a9174d472a9f691a45b974285d47729c45c6538070d85'
+            ))
         self._pk = self._sk.public_key
         self._clientkey = None
 
@@ -24,25 +27,27 @@ class CoCServerCrypto(CoCCrypto):
         self._clientkey = PublicKey(pk)
 
     def decryptPacket(self, packet):
-        messageid = int.from_bytes(packet[:2], byteorder="big")
-        unknown = int.from_bytes(packet[5:7], byteorder="big")
+        messageid = int.from_bytes(packet[:2], byteorder='big')
+        unknown = int.from_bytes(packet[5:7], byteorder='big')
         payload = packet[7:]
-        if messageid == 10100: # ClientHandshake
+        if messageid == 10100:  # ClientHandshake
             return messageid, unknown, payload
-        elif messageid == 10101: # Login
+        elif messageid == 10101:  # Login
             self.clientkey = payload[:32]
             self.beforenm(self.clientkey)
-            nonce = CoCNonce(clientkey=self.clientkey, serverkey=self.serverkey)
+            nonce = CrNonce(clientkey=self.clientkey,
+                            serverkey=self.serverkey)
             ciphertext = payload[32:]
             try:
                 message = self.decrypt(ciphertext, nonce)
             except CryptoError:
-                print("Failed to decrypt the message (server, {}).".format(messageid))
+                print('Failed to decrypt the message (server, {}).'
+                      .format(messageid))
                 self.transport.loseConnection()
                 return False
             else:
                 self.decrypt_nonce = self.client.encrypt_nonce = message[24:48]
-                print("Client nonce")
+                print('Client nonce')
                 print(hexdump(message[24:48]))
                 return messageid, unknown, message[48:]
         else:
@@ -54,7 +59,9 @@ class CoCServerCrypto(CoCCrypto):
         if messageid == 20100 or (messageid == 20103 and not self.session_key):
             return messageid, unknown, payload
         elif messageid in {20103, 20104}:
-            nonce = CoCNonce(nonce=self.decrypt_nonce, clientkey=self.clientkey, serverkey=self.serverkey)
+            nonce = CrNonce(nonce=self.decrypt_nonce,
+                            clientkey=self.clientkey,
+                            serverkey=self.serverkey)
             message = self.encrypt_nonce + self.client.k + payload
             ciphertext = self.encrypt(message, nonce)
             self.k = self.client.k

@@ -1,9 +1,9 @@
-from pyblake2 import blake2b
 import nacl.utils
 from nacl.public import Box, PrivateKey, PublicKey
+from pyblake2 import blake2b
 
 
-class CoCCrypto:
+class CrCrypto:
     _sk = None
     _pk = None
     _k = None
@@ -30,7 +30,7 @@ class CoCCrypto:
 
     @encrypt_nonce.setter
     def encrypt_nonce(self, encrypt_nonce):
-        self._encrypt_nonce = CoCNonce(nonce=encrypt_nonce)
+        self._encrypt_nonce = CrNonce(nonce=encrypt_nonce)
 
     @property
     def decrypt_nonce(self):
@@ -38,7 +38,7 @@ class CoCCrypto:
 
     @decrypt_nonce.setter
     def decrypt_nonce(self, decrypt_nonce):
-        self._decrypt_nonce = CoCNonce(nonce=decrypt_nonce)
+        self._decrypt_nonce = CrNonce(nonce=decrypt_nonce)
 
     def keypair(self):
         self._sk = PrivateKey.generate()
@@ -60,14 +60,8 @@ class CoCCrypto:
             nonce = self.decrypt_nonce
         return self._k.decrypt(ciphertext, bytes(nonce))
 
-    def encryptPacket(self, messageid, unknown, payload):
-        raise NotImplementedError
 
-    def decryptPacket(self, packet):
-        raise NotImplementedError
-
-
-class CoCNonce:
+class CrNonce:
 
     def __init__(self, nonce=None, clientkey=None, serverkey=None):
         if not clientkey:
@@ -90,4 +84,5 @@ class CoCNonce:
         return len(self._nonce)
 
     def increment(self):
-        self._nonce = (int.from_bytes(self._nonce, byteorder="little") + 2).to_bytes(Box.NONCE_SIZE, byteorder="little")
+        self._nonce = (int.from_bytes(self._nonce, byteorder='little')
+                       + 2).to_bytes(Box.NONCE_SIZE, byteorder='little')
