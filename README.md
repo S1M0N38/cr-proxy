@@ -1,4 +1,4 @@
-NOTHING IS CHANGED FROM THE ORIGINAL [CR-PROXY](https://github.com/royale-proxy/cr-proxy) JUST A CODE CLEAN UP
+NOTHING IS CHANGED FROM THE ORIGINAL [CR-PROXY](https://github.com/royale-proxy/cr-proxy), JUST A CODE CLEAN UP
 
 > **With version 8.212.12, Supercell has started banning accounts for the use of third party software. I am unsure what, if any, checks are in place that might reveal the use of this proxy, so continue use at your own risk.  See [here](http://supercell.com/en/safe-and-fair-play/) for more info.**
 
