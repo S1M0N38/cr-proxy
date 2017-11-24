@@ -13,12 +13,13 @@ class CrClientProtocol(CrClientCrypto, CrProtocol):
 
     def connectionMade(self):
         super(CrClientProtocol, self).connectionMade()
-        print("connected to {}:{} ...".format(self.peer.host, self.peer.port))
+        print('connected to {}:{} ...'.format(self.peer.host, self.peer.port))
 
     def packetDecrypted(self, messageid, version, payload):
         self.decodePacket(messageid, version, payload)
         self.server.sendPacket(messageid, version, payload)
 
     def connectionLost(self, reason):
-        print("connection to {}:{} closed ...".format(self.peer.host, self.peer.port))
+        print('connection to {}:{} closed ...'
+              .format(self.peer.host, self.peer.port))
         self.server.transport.loseConnection()
