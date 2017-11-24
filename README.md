@@ -17,7 +17,8 @@ To decode the file saved in replay: ```python replay.py <filename>```
 
 ### :thumbsup:  Acknowledgements
 
-Thanks to all people on the Discord server [Royale Developers](https://discord.gg/BuUtGPM) and [SC Dev Team](https://discord.gg/hTVhy3V)
+- Thanks to all people on the Discord server [Royale Developers](https://discord.gg/BuUtGPM) and [SC Dev Team](https://discord.gg/hTVhy3V)
+- Thanks to [Galaxy1036](https://github.com/Galaxy1036) to help with script/long.py 
 
 
 ### :book:  Important resources
