@@ -11,14 +11,13 @@ def HiLo2long(Hi, Lo):
     return (Lo << 8) + Hi
 
 
-def long2tag(long):
+def long2tag(long_):
     tag_char = list('0289PYLQGRJCUV')
     tag = []
-    while long > 0:
-        CharIndex = math.floor(long % len(tag_char))
-        tag.insert(0, tag_char[CharIndex])
-        long -= CharIndex
-        long /= len(tag_char)
+    while long_ > 0:
+        c_index = math.floor(long_ % len(tag_char))
+        tag.insert(0, tag_char[c_index])
+        long_ = (long_ - c_index) / len(tag_char)
     return ''.join(tag)
 
 
