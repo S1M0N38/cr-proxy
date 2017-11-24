@@ -98,28 +98,22 @@ def _read_one(stream):
 
 def decimalToHex(int32):
     sint32 = (int32 << 1) ^ (int32 >> 31)
-
     int32Bytes = encode(int32, False)
     sint32Bytes = encode(sint32, False)
-    print("int32={} bytes={}"
-          .format(int32, binascii.hexlify(int32Bytes)))
-    print("sint32={} bytes={}"
-          .format(sint32, binascii.hexlify(sint32Bytes)))
     rrsint32Bytes = encode(sint32, True)
-    print("rrsint32={} bytes={}"
-          .format(sint32, binascii.hexlify(rrsint32Bytes)))
+    int32Hex = binascii.hexlify(int32Bytes).decode('utf-8')
+    sint32Hex = binascii.hexlify(sint32Bytes).decode('utf-8')
+    rrsint32Hex = binascii.hexlify(rrsint32Bytes).decode('utf-8')
+    return int32Hex, sint32Hex, rrsint32Hex
 
 
 def hexToDecimal(hexStr):
     decBytes = binascii.unhexlify(hexStr)
-    n = decode_bytes(decBytes, False)
     rrn = decode_bytes(decBytes, True)
-    print("int32={}".format(n))
-    sint32 = (((n) >> 1) ^ (-((n) & 1)))
-    print("sint32={}".format(sint32))
-    rrsint32 = (((rrn) >> 1) ^ (-((rrn) & 1)))
-    print("rrsint32={}".format(rrsint32))
-    print("int32 bin={}".format(bin(n)))
+    int32Dec = decode_bytes(decBytes, False)
+    sint32Dec = (((int32Dec) >> 1) ^ (-((int32Dec) & 1)))
+    rrsint32Dec = (((rrn) >> 1) ^ (-((rrn) & 1)))
+    return int32Dec, sint32Dec, rrsint32Dec
 
 
 def printHelp():
@@ -140,10 +134,17 @@ def main():
 
     arg = sys.argv[1]
     if (arg.startswith("0x")):
-        hexToDecimal(arg[2:])
+        int32Dec, sint32Dec, rrsint32Dec = hexToDecimal(arg[2:])
+        print('Hex = {}  |  int32 = {}'.format(arg[2:], int32Dec))
+        print('Hex = {}  |  sint32 = {}'.format(arg[2:], sint32Dec))
+        print('Hex = {}  |  rrsint32 = {}'.format(arg[2:], rrsint32Dec))
+        print('------------------------------------------------')
     else:
-        int32 = int(arg)
-        decimalToHex(int32)
+        int32Hex, sint32Hex, rrsint32Hex = decimalToHex(int(arg))
+        print('int32 = {}  |  int32Hex = {}'.format(int(arg), int32Hex))
+        print('int32 = {}  |  sint32Hex = {}'.format(int(arg), sint32Hex))
+        print('int32 = {}  |  rrsint32Hex = {}'.format(int(arg), rrsint32Hex))
+        print('------------------------------------------------')
 
 
 if __name__ == "__main__":
