@@ -1,0 +1,3 @@
+[submodule "cr/message/definitions"]
+	path = cr/message/definitions
+	url = https://github.com/iGio90/cr-messages.git
