@@ -1,6 +1,5 @@
 from io import BufferedReader, BytesIO, SEEK_CUR
 import zlib
-from sys import byteorder
 
 
 class CrMessageReader(BufferedReader):
@@ -24,7 +23,7 @@ class CrMessageReader(BufferedReader):
 
     @messageid.setter
     def messageid(self, messageid):
-        raise AttributeError("Message ID is read-only.")
+        raise AttributeError('Message ID is read-only.')
 
     @property
     def unknown(self):
@@ -32,10 +31,10 @@ class CrMessageReader(BufferedReader):
 
     @unknown.setter
     def unknown(self, messageid):
-        raise AttributeError("Unknown is read-only.")
+        raise AttributeError('Unknown is read-only.')
 
     def read_byte(self):
-        return int.from_bytes(self.read(1), byteorder="big")
+        return int.from_bytes(self.read(1), byteorder='big')
 
     def read_scid(self):
         hi = self.read_rrsint32()
@@ -45,15 +44,15 @@ class CrMessageReader(BufferedReader):
         return hi * 1000000 + lo
 
     def read_rrslong(self):
-        hi = self.read_rrsint32().to_bytes(4, byteorder="big")
-        lo = self.read_rrsint32().to_bytes(4, byteorder="big")
-        return int.from_bytes(hi + lo, byteorder="big")
+        hi = self.read_rrsint32().to_bytes(4, byteorder='big')
+        lo = self.read_rrsint32().to_bytes(4, byteorder='big')
+        return int.from_bytes(hi + lo, byteorder='big')
 
     def read_short(self, length=2):
-        return int.from_bytes(self.read(length), byteorder="big")
+        return int.from_bytes(self.read(length), byteorder='big')
 
     def read_int(self, length=4):
-        return int.from_bytes(self.read(length), byteorder="big")
+        return int.from_bytes(self.read(length), byteorder='big')
 
     def _read_varint(self, isRr):
         shift = 0
@@ -63,7 +62,7 @@ class CrMessageReader(BufferedReader):
             if isRr and shift == 0:
                 byte = self._sevenBitRotateLeft(byte)
 
-            i = int.from_bytes(byte, byteorder="big")
+            i = int.from_bytes(byte, byteorder='big')
             result |= (i & 0x7f) << shift
             shift += 7
             if not (i & 0x80):
@@ -96,28 +95,28 @@ class CrMessageReader(BufferedReader):
     def read_string(self):
         length = self.read_int()
         if length == pow(2, 32) - 1:
-            return b""
+            return b''
         else:
             try:
                 decoded = self.read(length)
             except MemoryError:
-                raise IndexError("String out of range.")
+                raise IndexError('String out of range.')
             else:
                 return decoded
 
     def read_zstring(self):
-        length = int.from_bytes(self.read(4), byteorder="big")
+        length = int.from_bytes(self.read(4), byteorder='big')
         if length == pow(2, 32) - 1:
-            return b""
-        zlength = int.from_bytes(self.read(4), byteorder="little")
+            return b''
+        zlength = int.from_bytes(self.read(4), byteorder='little')
         try:
             decoded = zlib.decompress(self.read(length - 4), 15, zlength)
         except MemoryError:
-            raise IndexError("String out of range.")
+            raise IndexError('String out of range.')
         except (ValueError, zlib.error) as e:
-            raise IndexError("Decompress error: {}".format(e))
+            raise IndexError('Decompress error: {}'.format(e))
         else:
             return decoded
 
     def peek_int(self, length=4):
-        return int.from_bytes(self.peek(length)[:length], byteorder="big")
+        return int.from_bytes(self.peek(length)[:length], byteorder='big')
