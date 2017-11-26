@@ -1,3 +1,7 @@
 [submodule "cr/message/definitions"]
 	path = cr/message/definitions
 	url = https://github.com/iGio90/cr-messages.git
+
+[submodule "cr/message/definitions"]
+	path = scripts/cr-csv
+	url = https://github.com/smlbiobot/cr-csv.git
