@@ -2,6 +2,6 @@
 	path = cr/message/definitions
 	url = https://github.com/iGio90/cr-messages.git
 
-[submodule "cr/message/definitions"]
+[submodule "scripts/cr-csv"]
 	path = scripts/cr-csv
 	url = https://github.com/smlbiobot/cr-csv.git
